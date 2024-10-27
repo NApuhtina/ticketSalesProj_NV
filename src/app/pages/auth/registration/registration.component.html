@@ -39,9 +39,9 @@
   </div>
 </div>
 <div class="mt-5 d-flex justify-content-center">
-  <p-checkbox [(ngModel)]="saveUserToLocalStorage"
+  <p-checkbox [(ngModel)]="saveUserToLocalStorage"  [binary]="true"
               (onChange)="saveUserToLocalStorage = $event.checked"
-              label="Сохранить пользователя в локальном хранилище">
+              label="Сохранить в локальном хранилище">
   </p-checkbox>
   <button [disabled]="!login || !psw || !pswRepeat"
           (click)="registration ($event)"

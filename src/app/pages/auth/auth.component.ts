@@ -11,7 +11,8 @@ import {MessageService} from "primeng/api";
   providers:[MessageService]
 })
 export class AuthComponent implements OnInit {
-  constructor(private authService:AuthService) { }
+  constructor(private authService:AuthService,
+              private messageService: MessageService) { }
 
   isTabCaching:boolean=false;
 

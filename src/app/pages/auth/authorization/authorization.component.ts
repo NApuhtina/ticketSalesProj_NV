@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {UserService} from "../../../services/user/user.service";
+import { ActivatedRoute, Router } from '@angular/router';
 import {AuthService} from "../../../services/auth/auth.service";
-import {IUser} from "../../../models/users";
+import IUser from "src/app/models/IUser";
 import { MessageService } from 'primeng/api';
 
 @Component({
@@ -19,7 +21,10 @@ export class AuthorizationComponent implements OnInit, OnDestroy {
   cardNumber: string;
   authTextButton: string;
   constructor(private authService:AuthService,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private userService: UserService) { }
 
   ngOnInit(): void {
     this.authTextButton = "Авторизоваться";

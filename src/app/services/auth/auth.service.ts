@@ -1,33 +1,52 @@
 import { Injectable } from '@angular/core';
-import {IUser} from "../../models/users";
+import {IUser} from "../../models/IUser";
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
-
-  private userStorage: IUser[]=[];
-
-  constructor() { }
-
-  checkUser(user:IUser):boolean {
-     const isUserExists = this.userStorage.find((el:IUser)=> el.login === user.login);
-     if(isUserExists) {
-       return isUserExists.psw === user.psw;
-     }
-     return false;
-  }
-
-  setUser(user:IUser):void  {
-    const isUserExists = this.userStorage.find((el)=> el.login === user.login);
-    if(!isUserExists && user?.login) {
-      this.userStorage.push (user);
+  private usersStorage: IUser[] = [];
+  constructor() {}
+  checkUser(user: IUser): boolean {
+    let foundUser = this.usersStorage.find(
+      (el) => el.login === user.login
+    );
+    if (foundUser) {
+      return user.psw === foundUser.psw;
+    } else {
+      const localStorageUser = window.localStorage.getItem(`user_${user.login}`);
+      if(localStorageUser) {
+        foundUser = JSON.parse(localStorageUser) as IUser;
+        return foundUser.psw === user.psw
+      } else {
+        return false;
+      }
     }
-
   }
-  isUserExists(user:IUser):boolean {
-    const isUserExists = this.userStorage.find((el:IUser)=> el.login === user.login);
-      return !isUserExists;
+  setUser(user: IUser, isUseLocalStorage: boolean): boolean {
+    const foundUser = this.usersStorage.find(
+      (el) => el.login === user.login
+    );
+    if(!foundUser && user?.login) {
+      if(isUseLocalStorage) {
+        window.localStorage.setItem(`user_${user.login}`, JSON.stringify(user));
+        return true;
+      } else {
+        this.usersStorage.push(user)
+        return true;
+      }
     }
-   }
-
+    return false;
+  }
+  isUserExists(user: IUser): boolean {
+    const foundUser = this.usersStorage.find(
+      (el) => el.login === user.login
+    );
+    if(foundUser) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
