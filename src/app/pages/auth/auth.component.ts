@@ -8,7 +8,6 @@ import {MessageService} from "primeng/api";
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
-  providers:[MessageService]
 })
 export class AuthComponent implements OnInit {
   constructor(private authService:AuthService,

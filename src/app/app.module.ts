@@ -1,25 +1,22 @@
 import { NgModule } from '@angular/core';
-import {ButtonModule} from 'primeng/button';
+
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+
 import { AppComponent } from './app.component';
 import {AppRoutingModule} from "./app-routing.module";
-import {AuthService} from "./services/auth/auth.service";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MessagesModule} from 'primeng/messages';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
 
   imports: [
     BrowserModule,
-    ButtonModule,
     BrowserAnimationsModule,
-    MessagesModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
   ],
-  providers: [AuthService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 

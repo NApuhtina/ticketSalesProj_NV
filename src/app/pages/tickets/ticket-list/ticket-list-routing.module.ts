@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TicketsComponent } from './tickets.component';
-import { TicketListComponent } from './ticket-list/ticket-list.component';
+import { TicketsComponent } from 'src/app/pages/tickets/tickets.component';
+import { TicketListComponent } from 'src/app/pages/tickets/ticket-list/ticket-list.component';
 
 const routes: Routes = [
   {
@@ -10,9 +10,8 @@ const routes: Routes = [
     children: [{ path: 'tickets-list', component: TicketListComponent }],
   },
 ];
-
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class TicketsRoutingModule { }
+export class TicketListRoutingModule {}

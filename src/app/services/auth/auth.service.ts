@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {IUser} from "../../models/IUser";
+import IUser from "../../models/IUser";
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +24,12 @@ export class AuthService {
       }
     }
   }
-  setUser(user: IUser, isUseLocalStorage: boolean): boolean {
+  setUser(user: IUser, saveUserToLocalStorage: boolean): boolean {
     const foundUser = this.usersStorage.find(
       (el) => el.login === user.login
     );
     if(!foundUser && user?.login) {
-      if(isUseLocalStorage) {
+      if(saveUserToLocalStorage) {
         window.localStorage.setItem(`user_${user.login}`, JSON.stringify(user));
         return true;
       } else {

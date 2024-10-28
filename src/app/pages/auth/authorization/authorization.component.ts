@@ -9,59 +9,54 @@ import { MessageService } from 'primeng/api';
   selector: 'app-authorization',
   templateUrl: './authorization.component.html',
   styleUrls: ['./authorization.component.css'],
-  providers: [MessageService]
-})
+ })
 
 export class AuthorizationComponent implements OnInit, OnDestroy {
-  loginText='Логин';
-  pswText='Пароль';
-  psw:string;
-  login:string;
-  selectedValues: boolean;
+  loginText = 'Логин';
+  pswText = 'Пароль';
+  psw: string;
+  login: string;
+  selectedValues: boolean = false;
   cardNumber: string;
   authTextButton: string;
-  constructor(private authService:AuthService,
+
+  constructor(private authService: AuthService,
               private messageService: MessageService,
               private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService) { }
+              private userService: UserService
+  ) {
+  }
 
   ngOnInit(): void {
     this.authTextButton = "Авторизоваться";
   }
-  ngOnDestroy() :void {
-    console.log('onDes')
+
+  ngOnDestroy(): void {
+    console.log('ngOnDes?')
   }
+
   vipStatusSelected() {
-    console.log('des')
   }
-  onAuth(ev:Event) :void {
+
+  onAuth(ev: Event): void {
     ev.preventDefault();
-    const authUser:IUser = {
+    const user: IUser = {
       psw: this.psw,
-      login: this.login
+      login: this.login,
+    };
+
+    if (this.authService.checkUser(user)) {
+      this.userService.setUser(user);
+      this.router.navigate(['tickets/tickets-list']);
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Ошибка авторизации',
+        detail:
+          'Пользователь с такими данными не существует или введен неверный пароль',
+      });
     }
-   if (this.authService.checkUser(authUser)) {
-     console.log('auth true');
-   } else
-    console.log('auth false');
-    this.messageService.add({severity:'error', summary: 'Ошибка авторизации', detail: 'Неверный логин или пароль'});
-    }
-
-
-  // Метод проверки пользователя
-  checkUser(authUser: IUser): boolean {
-    let userInStore: IUser = <IUser>{}; // Объявляем и инициализируем переменную
-    const userJson = window.localStorage.getItem('currentUser');
-
-    if (userJson) {
-      userInStore = JSON.parse(userJson); // Преобразуем строку в объект
-
-      // Проверка корректности пароля (замените на свой код)
-      if (userInStore.psw === authUser.psw) { // Проверяем пароль
-        return true; // Возвращаем true, если пароли совпадают
-      }
-    }
-    return false; // В противном случае, возвращаем false
   }
 }
+

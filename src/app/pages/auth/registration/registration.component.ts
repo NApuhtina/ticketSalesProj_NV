@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {MessageService} from "primeng/api";
-import {IUser} from 'src/app/models/IUser';
+import IUser from "../../../models/IUser";
 import {AuthService} from 'src/app/services/auth/auth.service'
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
-  providers:[MessageService]
-})
+ })
 
 export class RegistrationComponent implements OnInit {
   login: string;
