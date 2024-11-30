@@ -1,52 +1,55 @@
-<div class="d-flex flex-column col-12 registration-input-wrap">
+<div
+  class="d-flex flex-column gap-3 col-8 registration-input-wrap m-auto align-items-center"
+>
   <div>
-    <span class="mx-3">Логин</span>
-    <input type="text"
-           pInputText
-           [ngClass]="{'input-error':!login}"
-           [(ngModel)]="login"/>
-  </div>
-  <div>
-    <span class="mx-3">Пароль</span>
-    <input type="password"
-           class="mt-3"
-           pInputText
-           [ngClass]="{'input-error':!psw}"
-           [(ngModel)]="psw"/>
+    <span class="me-3">Логин</span>
+    <input
+      type="text"
+      pInputText
+      [ngClass]="{ 'input-error': !login }"
+      [(ngModel)]="login"
+    />
   </div>
 
   <div>
-    <span class="mx-3">Подтверждение пароля</span>
-    <input type="password"
-           class="mt-3"
-           pInputText
-           [ngClass]="{'input-error':!pswRepeat}"
-           [(ngModel)]="pswRepeat"/>
+    <span class="me-3">Пароль</span>
+    <input
+      type="password"
+      pInputText
+      [ngClass]="{ 'input-error': !password }"
+      [(ngModel)]="password"
+    />
   </div>
+
   <div>
-    <span class="mx-3">Почта</span>
-    <input type="text"
-           class="mt-3"
-           pInputText
-           [(ngModel)]="email"/>
+    <span class="me-3">Подтверждение пароля</span>
+    <input
+      type="password"
+      pInputText
+      [ngClass]="{ 'input-error': !passwordRepeat }"
+      [(ngModel)]="passwordRepeat"
+    />
   </div>
+
   <div>
-    <span class="mx-3">Номер карты</span>
-    <input type="text"
-           class="mt-3"
-           pInputText
-           [(ngModel)]="cardNumber"/>
+    <span class="me-3">Email</span>
+    <input type="email" pInputText [(ngModel)]="email" />
   </div>
+
+  <div *ngIf="showCardNumber">
+    <span class="me-3">Номер карты</span>
+    <input type="text" pInputText [(ngModel)]="cardNumber" />
+  </div>
+
+  <div>
+    <p-checkbox label="Использовать локальное хранилище"
+     [binary]="true" [(ngModel)]="isUseLocalStorage">
+    </p-checkbox>
+  </div>
+
+  <p-button
+    label="Зарегистрироваться"
+    [disabled]="!login || !password || !passwordRepeat"
+    (click)="registration($event)"
+  ></p-button>
 </div>
-<div class="mt-5 d-flex justify-content-center">
-  <p-checkbox [(ngModel)]="saveUserToLocalStorage"
-              name="groupname" [binary]="true"
-              (onChange)="saveUserToLocalStorage = $event.checked"
-              label="Сохранить пользователя в локальном хранилище">
-  </p-checkbox>
-  <button [disabled]="!login || !psw || !pswRepeat"
-          (click)="registration ($event)"
-          type="button"
-          class="btn btn-success">Зарегистрироваться</button>
-  </div>
-<p-toast></p-toast>

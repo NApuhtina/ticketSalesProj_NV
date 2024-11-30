@@ -1,62 +1,64 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from "../../../services/auth/auth.service";
-import {IUser} from "../../../models/users";
+import { UserService } from './../../../services/user/user.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import IUser from 'src/app/models/IUser';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { ConfigService } from 'src/app/services/config/config.service';
 
 @Component({
   selector: 'app-authorization',
   templateUrl: './authorization.component.html',
-  styleUrls: ['./authorization.component.css'],
-  providers: [MessageService]
+  styleUrls: ['./authorization.component.scss'],
 })
-
 export class AuthorizationComponent implements OnInit, OnDestroy {
-  loginText='Логин';
-  pswText='Пароль';
-  psw:string;
-  login:string;
-  selectedValues: boolean;
+  loginNameLable: string = 'Логин';
+  passwordLable: string = 'Пароль';
+  login: string = '';
+  password: string = '';
+  selectedValue: boolean = false;
   cardNumber: string;
   authTextButton: string;
-  constructor(private authService:AuthService,
-              private messageService: MessageService) { }
+  showCardNumber: boolean;
+
+
+  constructor(
+    private authService: AuthService,
+    private messageService: MessageService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
-    this.authTextButton = "Авторизоваться";
+    this.authTextButton = 'Авторизоваться';
+    this.showCardNumber = ConfigService.config.useUserCard;
   }
-  ngOnDestroy() :void {
-    console.log('onDes')
+
+  ngOnDestroy(): void {
+    console.log('AuthorizationComponent is destroyed');
   }
-  vipStatusSelected() {
-    console.log('des')
-  }
-  onAuth(ev:Event) :void {
-    ev.preventDefault();
-    const authUser:IUser = {
-      psw: this.psw,
-      login: this.login
+
+  vipStatusSelected(): void {}
+
+  onAuth(e: Event): void {
+    const user: IUser = {
+      login: this.login,
+      password: this.password,
+      cardNumber: this.cardNumber
+    };
+
+    if (this.authService.checkUser(user)) {
+      this.userService.setUser(user);
+      this.userService.setToken('user-private-token');
+      this.router.navigate(['tickets/tickets-list']);
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Ошибка авторизации',
+        detail:
+          'Пользователь с такими данными не существует или введен неверный пароль',
+      });
     }
-   if (this.authService.checkUser(authUser)) {
-     console.log('auth true');
-   } else
-    console.log('auth false');
-    this.messageService.add({severity:'error', summary: 'Ошибка авторизации', detail: 'Неверный логин или пароль'});
-    }
-
-
-  // Метод проверки пользователя
-  checkUser(authUser: IUser): boolean {
-    let userInStore: IUser = <IUser>{}; // Объявляем и инициализируем переменную
-    const userJson = window.localStorage.getItem('currentUser');
-
-    if (userJson) {
-      userInStore = JSON.parse(userJson); // Преобразуем строку в объект
-
-      // Проверка корректности пароля (замените на свой код)
-      if (userInStore.psw === authUser.psw) { // Проверяем пароль
-        return true; // Возвращаем true, если пароли совпадают
-      }
-    }
-    return false; // В противном случае, возвращаем false
   }
 }

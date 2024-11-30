@@ -5,7 +5,15 @@
   "projects": {
     "ticketSales2022": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -23,11 +31,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
+              "src/assets/main.scss",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/bootstrap/scss/bootstrap.scss"
+              "node_modules/bootstrap/dist/css/bootstrap.css"
             ],
             "scripts": []
           },
@@ -103,6 +111,6 @@
     }
   },
   "cli": {
-    "analytics": "b0c12cdc-280a-409a-b25f-0c8831f33a37"
+    "analytics": "5009f52f-1596-41db-a44a-a0ddfc431e70"
   }
 }

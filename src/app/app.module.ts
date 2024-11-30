@@ -1,26 +1,44 @@
-import { NgModule } from '@angular/core';
-import {ButtonModule} from 'primeng/button';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
-import {AppRoutingModule} from "./app-routing.module";
-import {AuthService} from "./services/auth/auth.service";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MessagesModule} from 'primeng/messages';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
+
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+import {AppComponent} from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {RestInterceptorsService} from './services/interceptors/rest-interceptors.service';
+import {ConfigService} from './services/config/config.service';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    ButtonModule,
+    AppRoutingModule,
     BrowserAnimationsModule,
-    MessagesModule,
-    AppRoutingModule
+    HttpClientModule,
   ],
-  providers: [AuthService],
-  bootstrap: [AppComponent]
+  providers: [
+    ConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [ConfigService],
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RestInterceptorsService,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
+export class AppModule {
+}
 
-export class AppModule { }
+function initializeApp(config: ConfigService) {
+  //config.configLoad();
+  return () => config.loadPromise().then(() => {
+    console.log('---CONFIG LOADED--', ConfigService.config);
+  });
+}
